@@ -16,16 +16,17 @@ exports.getTodos = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-
 };
 
 exports.addTodo = async (req, res) => {
   const newTodo = new Todo({
-    text: req.body.text
+    text: req.body.text,
+    completed: false,
   });
+
   try {
     const savedTodo = await newTodo.save();
-    res.json(savedTodo);
+    res.status(201).json(savedTodo);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -33,10 +34,11 @@ exports.addTodo = async (req, res) => {
 
 exports.deleteTodo = async (req, res) => {
   try {
-    const todo = await Todo.findById(req.params.id);
-    if (!todo) return res.status(404).json({ message: 'Todo not found' });
-    await todo.remove();
-    res.json({ message: 'Todo deleted' });
+    const todo = await Todo.findByIdAndDelete(req.params.id);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.json({ message: 'Todo deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

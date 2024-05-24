@@ -1,8 +1,9 @@
- // backend/server.js
+// backend/server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const todoRoutes = require('./routes/todoRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const port = 5000;
@@ -16,6 +17,7 @@ mongoose.connect('mongodb://localhost:27017/todoapp', {
 });
 
 app.use('/api', todoRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
